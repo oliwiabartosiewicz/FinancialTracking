@@ -41,8 +41,9 @@
         android:layout_height="wrap_content"
         android:hint="Email"
         app:boxBackgroundMode="outline"
-        app:boxStrokeColor="@android:color/white"
-        app:hintTextColor="@android:color/white"
+        app:boxStrokeColor="@color/black"
+        app:boxBackgroundColor="@color/white"
+        app:hintTextColor="@color/black"
         app:layout_constraintTop_toBottomOf="@id/textViewLoginSubtitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,14 +58,16 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/passwordLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Password"
         app:boxBackgroundMode="outline"
-        app:boxStrokeColor="@android:color/white"
-        app:hintTextColor="@android:color/white"
+        app:boxStrokeColor="@color/black"
+        app:boxBackgroundColor="@color/white"
+        app:hintTextColor="@color/black"
         app:endIconMode="password_toggle"
         app:layout_constraintTop_toBottomOf="@id/emailLayout"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,6 +81,7 @@
             android:inputType="textPassword"
             android:textColor="@android:color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
+
 
 
     <Button
