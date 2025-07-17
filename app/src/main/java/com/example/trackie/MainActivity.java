@@ -29,10 +29,11 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent loginIntent = new Intent(MainActivity.this;
+                Intent loginIntent = new Intent(MainActivity.this, HostActivity.class);
                 startActivity(loginIntent);
+                finish();
             }
 
-        }
+        });
     }
 }
