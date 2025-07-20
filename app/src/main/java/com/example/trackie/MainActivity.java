@@ -6,11 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -41,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         signUpPrompt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent loginIntent = new Intent(MainActivity.this, signup.class);
+                Intent loginIntent = new Intent(MainActivity.this, SignupActivity.class);
                 startActivity(loginIntent);
                 finish();
             }
