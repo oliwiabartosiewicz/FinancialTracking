@@ -88,9 +88,14 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        logoutButton.setOnClickListener(v -> {
+            mAuth.signOut();
+            Toast.makeText(getContext(), "Logged out", Toast.LENGTH_SHORT).show();
 
-        //change  password and log out!!!!!!!!
-
+            requireActivity().finish();
+            startActivity(new android.content.Intent(getContext(), MainActivity.class));
+        });
+//change password
 
         return view;
     }
