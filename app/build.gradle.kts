@@ -34,7 +34,7 @@ android {
         viewBinding = true
     }
 }
-
+var cameraxVersion = "1.1.0-alpha05"
 dependencies {
 
     implementation(libs.appcompat)
@@ -48,4 +48,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("androidx.camera:camera-core:${cameraxVersion}")
+    implementation("androidx.camera:camera-camera2:${cameraxVersion}")
+    implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
+    implementation("androidx.camera:camera-view:1.0.0-alpha25");
+    implementation("com.google.mlkit:text-recognition:16.0.0");
+
 }
