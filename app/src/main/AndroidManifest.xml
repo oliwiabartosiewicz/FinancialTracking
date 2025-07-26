@@ -19,9 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Trackie"
         tools:targetApi="31">
-        <activity
-            android:name=".PreviewOfImage"
-            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
