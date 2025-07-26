@@ -53,5 +53,7 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
     implementation("androidx.camera:camera-view:1.0.0-alpha25");
     implementation("com.google.mlkit:text-recognition:16.0.0");
+    implementation("com.google.firebase:firebase-storage:20.3.0")
+
 
 }

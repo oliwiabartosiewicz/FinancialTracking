@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
@@ -42,7 +44,8 @@ public class ScanFragment extends Fragment {
     private ActivityResultLauncher<String> imagePickerLauncher;
     private static final int REQUEST_CAMERA_PERMISSION = 100;
 
-    public ScanFragment() {}
+    public ScanFragment() {
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -156,6 +159,7 @@ public class ScanFragment extends Fragment {
                             Toast.makeText(getContext(), "User not signed in", Toast.LENGTH_SHORT).show();
                             return;
                         }
+                        Log.d("ScanFragment", "Receipt data: " + receiptData.toString());
                         uploadToStorageAndFirestore(imageUri, receiptData);
                     })
                     .addOnFailureListener(e -> {
@@ -168,10 +172,18 @@ public class ScanFragment extends Fragment {
         }
     }
 
-
-//receipt upload to firestore and storage of it
     private void uploadToStorageAndFirestore(Uri imageUri, Map<String, Object> receiptData) {
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        if (receiptData == null || receiptData.isEmpty()) {
+            Log.e("ScanFragment", "receiptData is empty. Aborting upload.");
+            Toast.makeText(getContext(), "No text found to save with the receipt.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Add timestamp
+        receiptData.put("timestamp", FieldValue.serverTimestamp());
+
         StorageReference storageRef = FirebaseStorage.getInstance().getReference()
                 .child("receipts/" + userId + "/" + System.currentTimeMillis() + ".jpg");
 
@@ -179,23 +191,25 @@ public class ScanFragment extends Fragment {
                 .addOnSuccessListener(taskSnapshot -> {
                     storageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
                         receiptData.put("imageUrl", downloadUri.toString());
+
                         FirebaseFirestore.getInstance()
                                 .collection("users")
                                 .document(userId)
                                 .collection("receipts")
                                 .add(receiptData)
                                 .addOnSuccessListener(docRef -> {
+                                    Log.d("ScanFragment", "Receipt saved with ID: " + docRef.getId());
                                     Toast.makeText(getContext(), "Receipt saved!", Toast.LENGTH_SHORT).show();
                                 })
                                 .addOnFailureListener(e -> {
+                                    Log.e("ScanFragment", "Firestore save failed", e);
                                     Toast.makeText(getContext(), "Firestore save failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                                 });
                     });
                 })
                 .addOnFailureListener(e -> {
+                    Log.e("ScanFragment", "Image upload failed", e);
                     Toast.makeText(getContext(), "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
-
     }
-
 }
