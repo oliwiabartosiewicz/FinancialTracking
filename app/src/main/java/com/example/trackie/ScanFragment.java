@@ -30,6 +30,8 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.example.trackie.ReceiptAnalysis2;
+
 
 
 import java.io.File;
@@ -148,11 +150,30 @@ public class ScanFragment extends Fragment {
                         for (Text.TextBlock block : result.getTextBlocks()) {
                             resultText.append(block.getText()).append("\n");
                         }
-                        String ocrText = resultText.toString();
                         //Stroing receipts in firestore
+                        String ocrText = resultText.toString();
+
+                        Log.d("ScanFragment", "Analysing text: " + ocrText);
+                        Map<String, String> analysedFields = ReceiptAnalysis2.analyseText(ocrText);
+                        Log.d("ScanFragment", "Extracted fields: " + analysedFields.toString());
+
                         Map<String, Object> receiptData = new HashMap<>();
                         receiptData.put("rawText", ocrText);
-                        receiptData.put("timestamp", com.google.firebase.firestore.FieldValue.serverTimestamp());
+                        receiptData.put("timestamp", FieldValue.serverTimestamp());
+
+                        if (analysedFields.containsKey("date")) {
+                            receiptData.put("date", analysedFields.get("date"));
+                        }
+                        if (!analysedFields.containsKey("date")) {
+                            Log.w("ScanFragment", "No date extracted!");
+                        }
+                        if (!analysedFields.containsKey("total")) {
+                            Log.w("ScanFragment", "No total extracted!");
+                        }
+
+                        if (analysedFields.containsKey("total")) {
+                            receiptData.put("total", analysedFields.get("total"));
+                        }
 
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         if (user == null) {
