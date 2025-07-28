@@ -77,7 +77,6 @@ public class ReceiptAnalysis2 {
             } catch (NumberFormatException ignored) {
             }
         }
-
         return bestMatch;
     }
 
