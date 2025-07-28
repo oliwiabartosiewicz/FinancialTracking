@@ -20,6 +20,9 @@
         android:theme="@style/Theme.Trackie"
         tools:targetApi="31">
         <activity
+            android:name=".ReceiptDetail"
+            android:exported="false" />
+        <activity
             android:name=".ReceiptAnalysis2"
             android:exported="false" />
 
