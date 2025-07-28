@@ -15,6 +15,10 @@ public class ReceiptAnalysis2 {
 
         String date = extractDate(ocrText);
         String total = extractTotal(ocrText);
+        if (total == null) {
+            total = extractTotalFromText(ocrText);
+        }
+
 
         if (date != null) {
             extractedData.put("date", date);
@@ -52,4 +56,29 @@ public class ReceiptAnalysis2 {
         }
         return null;
     }
+
+    public static String extractTotalFromText(String text) {
+        if (text == null || text.isEmpty()) return null;
+
+        Pattern pattern = Pattern.compile("£\\s?(\\d+[\\.\\,]\\d{2})");
+        Matcher matcher = pattern.matcher(text);
+
+        double highestValue = -1;
+        String bestMatch = null;
+
+        while (matcher.find()) {
+            String amountStr = matcher.group(1).replace(",", ".");
+            try {
+                double value = Double.parseDouble(amountStr);
+                if (value > highestValue) {
+                    highestValue = value;
+                    bestMatch = "£" + amountStr;
+                }
+            } catch (NumberFormatException ignored) {
+            }
+        }
+
+        return bestMatch;
+    }
+
 }
