@@ -23,7 +23,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
     @NonNull
     @Override
     public ReceiptViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.activity_receipt_detail, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.receipt_item, parent, false);
         return new ReceiptViewHolder(view);
     }
 
@@ -32,7 +32,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
         Receipt receipt = receiptList.get(position);
         holder.receiptDate.setText("Date: " + receipt.getDate());
         holder.receiptTotal.setText("Total: " + receipt.getTotal());
-
+//loading the image using glide
         Glide.with(context)
                 .load(receipt.getImageUrl())
                 .into(holder.receiptImage);
@@ -47,6 +47,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
         ImageView receiptImage;
         TextView receiptDate, receiptTotal;
 
+        //loops through data in firebase and displays it in the recycler view
         public ReceiptViewHolder(View itemView) {
             super(itemView);
             receiptImage = itemView.findViewById(R.id.receiptImage);

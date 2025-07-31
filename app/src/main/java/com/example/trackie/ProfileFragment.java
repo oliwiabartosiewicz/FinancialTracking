@@ -95,7 +95,7 @@ public class ProfileFragment extends Fragment {
             requireActivity().finish();
             startActivity(new android.content.Intent(getContext(), MainActivity.class));
         });
-//change password
+
 
         return view;
     }

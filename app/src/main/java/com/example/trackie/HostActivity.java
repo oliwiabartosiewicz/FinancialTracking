@@ -29,7 +29,7 @@ public class HostActivity extends AppCompatActivity implements NavigationBarView
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavigationView);
         bottomNav.setOnItemSelectedListener(this);
 
-        // Show HomeFragment by default
+        // default home fragment
         bottomNav.setSelectedItemId(R.id.nav_home);
     }
 

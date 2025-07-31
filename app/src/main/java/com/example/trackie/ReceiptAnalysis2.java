@@ -18,13 +18,10 @@ public class ReceiptAnalysis2 {
         if (total == null) {
             total = extractTotalFromText(ocrText);
         }
-
-
         if (date != null) {
             extractedData.put("date", date);
             Log.d("ReceiptAnalysis", "Extracted date: " + date);
         }
-
         if (total != null) {
             extractedData.put("total", total);
             Log.d("ReceiptAnalysis", "Extracted total: " + total);
@@ -74,6 +71,7 @@ public class ReceiptAnalysis2 {
                     highestValue = value;
                     bestMatch = "£" + amountStr;
                 }
+                //extracts the numeric part from the £, if unable to do so it  skips it without crashing
             } catch (NumberFormatException ignored) {
             }
         }
