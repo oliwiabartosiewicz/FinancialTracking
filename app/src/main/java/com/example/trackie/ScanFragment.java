@@ -150,8 +150,13 @@ public class ScanFragment extends Fragment {
                         for (Text.TextBlock block : result.getTextBlocks()) {
                             resultText.append(block.getText()).append("\n");
                         }
-                        //Stroing receipts in firestore
+                        //Storing receipts in firestore
                         String ocrText = resultText.toString();
+                        NLPCategory nlp = new NLPCategory(requireContext());
+                        String category = nlp.classify(ocrText);
+                        Log.d("ScanFragment", "Predicted category: " + category);
+                        Toast.makeText(getContext(), "Category: " + category, Toast.LENGTH_SHORT).show();
+
 
                         Log.d("ScanFragment", "Analysing text: " + ocrText);
                         Map<String, String> analysedFields = ReceiptAnalysis2.analyseText(ocrText);
