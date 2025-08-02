@@ -166,6 +166,8 @@ public class ScanFragment extends Fragment {
                         receiptData.put("rawText", ocrText);
                         receiptData.put("timestamp", FieldValue.serverTimestamp());
 
+                        receiptData.put("category", category);
+
                         if (analysedFields.containsKey("date")) {
                             receiptData.put("date", analysedFields.get("date"));
                         }
@@ -209,6 +211,7 @@ public class ScanFragment extends Fragment {
 
         // Add timestamp
         receiptData.put("timestamp", FieldValue.serverTimestamp());
+
 
         StorageReference storageRef = FirebaseStorage.getInstance().getReference()
                 .child("receipts/" + userId + "/" + System.currentTimeMillis() + ".jpg");
