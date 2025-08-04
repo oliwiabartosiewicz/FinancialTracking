@@ -55,9 +55,10 @@ public class ReceiptsFragment extends Fragment {
                             String date = doc.getString("date");
                             String total = doc.getString("total");
                             String imageUrl = doc.getString("imageUrl");
+                            String category = doc.getString("category");
 
-                            if (date != null && total != null && imageUrl != null) {
-                                receiptList.add(new Receipt(date, total, imageUrl));
+                            if (date != null && total != null && imageUrl != null && category != null) {
+                                receiptList.add(new Receipt(date, total, imageUrl, category));
                             }
                         }
                         adapter.notifyDataSetChanged();
