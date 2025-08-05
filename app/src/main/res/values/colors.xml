@@ -19,4 +19,10 @@
     <color name="pink">#FFE3F5</color>
     <color name="dark_pink">#CE5DAE</color>
     <color name="azure_blue">#F8FFFF</color>
+    <color name="pastel_blue">#A7C7E7</color>
+    <color name="royal_blue">#4169E1</color>
+    <color name="sky_blue">#87CEEB</color>
+    <color name="cobalt_blue">#0047AB</color>
+    <color name="bright_blue">#0096FF</color>
+
 </resources>
