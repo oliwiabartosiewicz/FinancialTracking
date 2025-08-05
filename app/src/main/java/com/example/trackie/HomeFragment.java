@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -36,19 +37,31 @@ public class HomeFragment extends Fragment {
     }
 
     private PieChart pieChart;
+    private TextView EatingOut;
+    private TextView HealthAndBeauty;
+    private TextView Shopping;
+    private TextView Pets;
+    private TextView Other;
+    private TextView Food;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         pieChart = view.findViewById(R.id.pieChart);
+        EatingOut = view.findViewById(R.id.EatingOut);
+        HealthAndBeauty = view.findViewById(R.id.HealthAndBeauty);
+        Shopping = view.findViewById(R.id.Shopping);
+        Pets = view.findViewById(R.id.Pets);
+        Other = view.findViewById(R.id.Other);
+        Food = view.findViewById(R.id.Food);
 
-        setupPieChart();
+        fetchAndDisplayCategoryTotalsfromFirebase();
 
         return view;
     }
 
-    private void setupPieChart() {
+    private void fetchAndDisplayCategoryTotalsfromFirebase() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) return;
         FirebaseFirestore.getInstance()
@@ -61,13 +74,16 @@ public class HomeFragment extends Fragment {
 
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         String category = doc.getString("category");
-                        String totalStr = doc.getString("total");
+                        if (category == null || category.isEmpty()) {
+                            category = "uncategorised";
+                        }
 
-                        //if no cat then will be skipped
-                        if (category == null || totalStr == null) {
-                            Log.w("HomeFragment", "Missing category or total in document: " + doc.getId());
+                        String totalStr = doc.getString("total");
+                        if (totalStr == null || totalStr.isEmpty()) {
+                            Log.w("HomeFragment", "Missing total in doc " + doc.getId());
                             continue;
                         }
+
 
                         // Remove currency symbol from total
                         totalStr = totalStr.replace("£", "").trim();
@@ -79,45 +95,53 @@ public class HomeFragment extends Fragment {
                             Log.w("HomeFragment", "Invalid total value in: " + doc.getId() + " - " + totalStr);
                         }
                     }
-                    List<PieEntry> entries = new ArrayList<>(); //list to create each pie chart slice
 
-                    // Loop through each category and its total spend
-                    for (Map.Entry<String, Float> entry : categorySums.entrySet()) {
-                        entries.add(new PieEntry(entry.getValue(), entry.getKey()));
-                                                                    //cat name
-                    }
-
-                    if (!entries.isEmpty()) {
-                        PieDataSet dataSet = new PieDataSet(entries, "Spending by Category");
-                        dataSet.setColors(new int[]{
-                                ContextCompat.getColor(requireContext(), R.color.blue),
-                                ContextCompat.getColor(requireContext(), R.color.pastel_blue),
-                                ContextCompat.getColor(requireContext(), R.color.royal_blue),
-                                ContextCompat.getColor(requireContext(), R.color.sky_blue),
-                                ContextCompat.getColor(requireContext(), R.color.cobalt_blue),
-                                ContextCompat.getColor(requireContext(), R.color.bright_blue),
-                        });
-
-                        pieChart.setNoDataText("Loading...");
-                        dataSet.setValueTextSize(14f);
-                        dataSet.setValueTextColor(Color.BLACK);
-
-                        PieData pieData = new PieData(dataSet);
-                        pieChart.setData(pieData);
-                        pieChart.getDescription().setEnabled(false);
-                        pieChart.setEntryLabelColor(Color.BLACK);
-                        pieChart.setEntryLabelTextSize(12f);
-                        pieChart.setCenterText("Total by Category");
-                        pieChart.setCenterTextSize(18f);
-                        pieChart.animateY(1000);
-                        pieChart.invalidate();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("HomeFragment", "Failed to load receipts", e);
+                    setupPieChart(categorySums);
                 });
 
-                }
+    }
+
+
+        private void setupPieChart(Map<String, Float> categorySums) {
+            List<PieEntry> entries = new ArrayList<>(); //list to create each pie chart slice
+
+            // Loop through each category and its total spend
+            for (Map.Entry<String, Float> entry : categorySums.entrySet()) {
+                entries.add(new PieEntry(entry.getValue(), entry.getKey()));
+                                                           //cat name
+            }
+
+            if (!entries.isEmpty()) {
+                PieDataSet dataSet = new PieDataSet(entries, "Spending by Category");
+                dataSet.setColors(new int[]{
+                        ContextCompat.getColor(requireContext(), R.color.blue),
+                        ContextCompat.getColor(requireContext(), R.color.pastel_blue),
+                        ContextCompat.getColor(requireContext(), R.color.royal_blue),
+                        ContextCompat.getColor(requireContext(), R.color.sky_blue),
+                        ContextCompat.getColor(requireContext(), R.color.cobalt_blue),
+                        ContextCompat.getColor(requireContext(), R.color.bright_blue),
+                });
+
+                dataSet.setValueTextSize(14f);
+                dataSet.setValueTextColor(Color.BLACK);
+
+                PieData pieData = new PieData(dataSet);
+                pieChart.setData(pieData);
+                pieChart.getDescription().setEnabled(false);
+                pieChart.setEntryLabelColor(Color.BLACK);
+                pieChart.setEntryLabelTextSize(12f);
+                pieChart.setCenterText("Total by Category");
+                pieChart.setCenterTextSize(18f);
+                pieChart.animateY(1000);
+                pieChart.invalidate();
+            }
+
+        }
+
+
+
+
+
     }
 
 

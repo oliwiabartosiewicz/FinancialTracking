@@ -50,9 +50,10 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/Food"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Food: £120.45"
+                    android:text="Food: £0.00"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -71,9 +72,10 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/Transport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Transport: £54.20"
+                    android:text="Transport: £0.00"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -94,9 +96,10 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/EatingOut"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" Eating out: £72.22"
+                    android:text=" Eating out: 0.00"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -115,9 +118,10 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/HealthAndBeauty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" Health and Beauty: £13.65"
+                    android:text=" Health and Beauty: £0.00"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -136,9 +140,10 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/Shopping"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" Shopping: £14.55"
+                    android:text=" Shopping: £0.00"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -157,9 +162,10 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/Pets"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" Pets: £44.20"
+                    android:text=" Pets: £0.00"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -179,9 +185,10 @@
                 android:padding="16dp">
 
                 <TextView
+                    android:id="@+id/Other"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" Other: £20.00"
+                    android:text=" Other: £0.00"
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
