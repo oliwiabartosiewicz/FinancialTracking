@@ -98,6 +98,7 @@ public class HomeFragment extends Fragment {
                                 ContextCompat.getColor(requireContext(), R.color.bright_blue),
                         });
 
+                        pieChart.setNoDataText("Loading...");
                         dataSet.setValueTextSize(14f);
                         dataSet.setValueTextColor(Color.BLACK);
 
@@ -106,6 +107,10 @@ public class HomeFragment extends Fragment {
                         pieChart.getDescription().setEnabled(false);
                         pieChart.setEntryLabelColor(Color.BLACK);
                         pieChart.setEntryLabelTextSize(12f);
+                        pieChart.setCenterText("Total by Category");
+                        pieChart.setCenterTextSize(18f);
+                        pieChart.animateY(1000);
+                        pieChart.invalidate();
                     }
                 })
                 .addOnFailureListener(e -> {
