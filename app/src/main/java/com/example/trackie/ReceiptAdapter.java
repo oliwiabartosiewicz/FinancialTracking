@@ -1,5 +1,6 @@
 package com.example.trackie;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,17 +31,24 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
     @Override
     public void onBindViewHolder(@NonNull ReceiptViewHolder holder, int position) {
         Receipt receipt = receiptList.get(position);
-        String url = receipt.getImageUrl();
         holder.receiptDate.setText("Date: " + receipt.getDate());
         holder.receiptTotal.setText("Total: " + receipt.getTotal());
+        String category = receipt.getCategory();
+        if (category == null || category.isEmpty()) {
+            category = "Uncategorised";
+        }
         holder.receiptCategory.setText("Category: " + receipt.getCategory());
 
+        String url = receipt.getImageUrl();
+        Log.d("ReceiptAdapter", " Image URL: " + url);
 
 //loading the image using glide
         Glide.with(context)
                 .load(receipt.getImageUrl())
                 .into(holder.receiptImage);
+
     }
+
 
     @Override
     public int getItemCount() {

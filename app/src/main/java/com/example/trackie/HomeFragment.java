@@ -19,6 +19,7 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -105,9 +106,16 @@ public class HomeFragment extends Fragment {
         private void setupPieChart(Map<String, Float> categorySums) {
             List<PieEntry> entries = new ArrayList<>(); //list to create each pie chart slice
 
+          //total sum per category of pie slice
+            float totalSum = 0f;
+            for (float val : categorySums.values()) {
+                totalSum += val;
+            }
+
             // Loop through each category and its total spend
             for (Map.Entry<String, Float> entry : categorySums.entrySet()) {
-                entries.add(new PieEntry(entry.getValue(), entry.getKey()));
+                float percentage = (entry.getValue() / totalSum) * 100;
+                entries.add(new PieEntry(percentage, entry.getKey()));
                                                            //cat name
             }
 
@@ -124,6 +132,7 @@ public class HomeFragment extends Fragment {
 
                 dataSet.setValueTextSize(14f);
                 dataSet.setValueTextColor(Color.BLACK);
+                dataSet.setValueFormatter(new PercentFormatter(pieChart));
 
                 PieData pieData = new PieData(dataSet);
                 pieChart.setData(pieData);

@@ -142,6 +142,7 @@ public class ScanFragment extends Fragment {
 
     private void runMLKitOCR(Uri imageUri) {
         try {
+
             InputImage image = InputImage.fromFilePath(requireContext(), imageUri);
             TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
             recognizer.process(image)
@@ -156,20 +157,22 @@ public class ScanFragment extends Fragment {
                         Log.d("ScanFragment", "OCR Text extracted:\n" + ocrText);
 
                         //extract category
-                        String category = Categorising.classify(ocrText);
+                        String extractedCategory = Categorising.classify(ocrText);
+                        String category = (extractedCategory != null && !extractedCategory.isEmpty()) ? extractedCategory : "Other";
                         Log.d("ScanFragment", " Category: " + category);
+                        Toast.makeText(getContext(), "Category: " + category, Toast.LENGTH_SHORT).show();
 
                         //extract data and time
                         Map<String, String> extracted = ReceiptAnalysis2.analyseText(ocrText);
                         String date  = extracted.get("date");
                         String total = extracted.get("total");
-                        Log.d("ScanFragment", "Extracted date: "  + date);
-                        Log.d("ScanFragment", "Extracted total: " + total);
+
 
                         Map<String, Object> receiptData = new HashMap<>();
                         receiptData.put("rawText", ocrText);
                         receiptData.put("timestamp", FieldValue.serverTimestamp());
                         receiptData.put("category", category);
+
                         if (date  != null) receiptData.put("date",  date);
                         if (total != null) receiptData.put("total", total);
 
@@ -179,6 +182,7 @@ public class ScanFragment extends Fragment {
                             Toast.makeText(getContext(), "User not signed in", Toast.LENGTH_SHORT).show();
                             return;
                         }
+
 
                         Log.d("ScanFragment", "Receipt data: " + receiptData.toString());
                         uploadToStorageAndFirestore(imageUri, receiptData);
@@ -198,7 +202,8 @@ public class ScanFragment extends Fragment {
 
         if (receiptData == null || receiptData.isEmpty()) {
             Log.e("ScanFragment", "receiptData is empty. Aborting upload.");
-            Toast.makeText(getContext(), "No text found to save with the receipt.", Toast.LENGTH_LONG).show();
+            if (getContext() != null) {
+            Toast.makeText(getContext(), "No text found to save with the receipt.", Toast.LENGTH_LONG).show();}
             return;
         }
 
@@ -221,17 +226,20 @@ public class ScanFragment extends Fragment {
                                 .add(receiptData)
                                 .addOnSuccessListener(docRef -> {
                                     Log.d("ScanFragment", "Receipt saved with ID: " + docRef.getId());
-                                    Toast.makeText(getContext(), "Receipt saved!", Toast.LENGTH_SHORT).show();
+                                    if (getContext() != null) {
+                                    Toast.makeText(getContext(), "Receipt saved!", Toast.LENGTH_SHORT).show();}
                                 })
                                 .addOnFailureListener(e -> {
                                     Log.e("ScanFragment", "Firestore save failed", e);
-                                    Toast.makeText(getContext(), "Firestore save failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                    if (getContext() != null) {
+                                    Toast.makeText(getContext(), "Firestore save failed: " + e.getMessage(), Toast.LENGTH_LONG).show();}
                                 });
                     });
                 })
                 .addOnFailureListener(e -> {
                     Log.e("ScanFragment", "Image upload failed", e);
-                    Toast.makeText(getContext(), "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    if (getContext() != null) {
+                    Toast.makeText(getContext(), "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();}
                 });
     }
 

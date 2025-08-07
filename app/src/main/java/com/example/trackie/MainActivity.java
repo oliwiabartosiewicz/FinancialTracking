@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mAuth = FirebaseAuth.getInstance();
         emailField = findViewById(R.id.emailEditText);
         passwordField = findViewById(R.id.passwordEditText);
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-  /*  @Override
+   @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -88,6 +88,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-    }*/
+    }
 
 }

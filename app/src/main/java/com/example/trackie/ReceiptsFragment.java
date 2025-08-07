@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +58,9 @@ public class ReceiptsFragment extends Fragment {
                             String imageUrl = doc.getString("imageUrl");
                             String category = doc.getString("category");
 
+
+                            Log.d("ReceiptsFragment", "Firestore doc imageUrl: " + imageUrl);
+
                             if (date != null && total != null && imageUrl != null && category != null) {
                                 receiptList.add(new Receipt(date, total, imageUrl, category));
                             }
@@ -69,9 +73,6 @@ public class ReceiptsFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "User not signed in", Toast.LENGTH_SHORT).show();
         }
-
-        adapter = new ReceiptAdapter(getContext(), receiptList);
-        recyclerView.setAdapter(adapter);
 
         return view;
     }

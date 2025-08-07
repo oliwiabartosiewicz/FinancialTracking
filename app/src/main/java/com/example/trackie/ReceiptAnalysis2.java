@@ -45,7 +45,14 @@ public class ReceiptAnalysis2 {
     }
 
     private static String extractTotal(String text) {
-        String totalPattern = "(?i)(total|amount|grand total)[:\\s]*[£$€]?[\\s]*([0-9]+\\.[0-9]{2})";
+        String totalPattern ="(?i)" +
+                "(total|amount|grand total|balance due|amount due|balance|subtotal|sub total|GBP)" +
+                "[:\\s]*" +
+                "[£$€]?\\s*" +
+                "([0-9]{1,3}(?:,[0-9]{3})*(?:\\.[0-9]{2})?" +
+                "|[0-9]+(?:\\,[0-9]{2})?)" +
+                "\\s*[£$€]?";
+
         Pattern pattern = Pattern.compile(totalPattern);
         Matcher matcher = pattern.matcher(text);
         if (matcher.find()) {
@@ -57,7 +64,7 @@ public class ReceiptAnalysis2 {
     public static String extractTotalFromText(String text) {
         if (text == null || text.isEmpty()) return null;
 
-        Pattern pattern = Pattern.compile("£\\s?(\\d+[\\.\\,]\\d{2})");
+        Pattern pattern = Pattern.compile("(?:£|€|EUR)?\\s*(\\d{1,4}[.,]\\d{2})");
         Matcher matcher = pattern.matcher(text);
 
         double highestValue = -1;
