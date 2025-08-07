@@ -61,9 +61,11 @@ public class ReceiptsFragment extends Fragment {
 
                             Log.d("ReceiptsFragment", "Firestore doc imageUrl: " + imageUrl);
 
-                            if (date != null && total != null && imageUrl != null && category != null) {
-                                receiptList.add(new Receipt(date, total, imageUrl, category));
-                            }
+                            receiptList.add(new Receipt(date, total, imageUrl, category));
+                            Log.d("ReceiptsFragment", "date: " + date + ", total: " + total + ", imageUrl: " + imageUrl + ", category: " + category);
+
+
+
                         }
                         adapter.notifyDataSetChanged();
                     })
