@@ -44,6 +44,7 @@ public class HomeFragment extends Fragment {
     private TextView Pets;
     private TextView Other;
     private TextView Food;
+    private TextView Transport;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,6 +57,7 @@ public class HomeFragment extends Fragment {
         Pets = view.findViewById(R.id.Pets);
         Other = view.findViewById(R.id.Other);
         Food = view.findViewById(R.id.Food);
+        Transport = view.findViewById(R.id.Transport);
 
         fetchAndDisplayCategoryTotalsfromFirebase();
 
@@ -76,19 +78,13 @@ public class HomeFragment extends Fragment {
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         String category = doc.getString("category");
                         if (category == null || category.isEmpty()) {
-                            category = "uncategorised";
+                            category = "Other";
                         }
 
                         String totalStr = doc.getString("total");
                         if (totalStr == null || totalStr.isEmpty()) {
-                            Log.w("HomeFragment", "Missing total in doc " + doc.getId());
                             continue;
                         }
-
-
-
-
-
 
                         // Remove currency symbol from total
                         totalStr = totalStr.replace("£", "").trim();
@@ -102,8 +98,28 @@ public class HomeFragment extends Fragment {
                     }
 
                     setupPieChart(categorySums);
+                    updateCategoryTextViews(categorySums);
                 });
 
+    }
+    private void updateCategoryTextViews(Map<String, Float> categorySums) {
+        // if no total found then set to 0.00
+        float foodTotal = categorySums.getOrDefault("Food", 0f);
+        float eatingOutTotal = categorySums.getOrDefault("Eating Out", 0f);
+        float healthTotal = categorySums.getOrDefault("Health and Beauty", 0f);
+        float shoppingTotal = categorySums.getOrDefault("Shopping", 0f);
+        float petsTotal = categorySums.getOrDefault("Pets", 0f);
+        float otherTotal = categorySums.getOrDefault("Other", 0f);
+        float transportTotal = categorySums.getOrDefault("Transport", 0f);
+
+        // Update the actual totals
+        Food.setText("Food: £" + String.format("%.2f", foodTotal));
+        EatingOut.setText("Eating Out: £" + String.format("%.2f", eatingOutTotal));
+        HealthAndBeauty.setText("Health and Beauty: £" + String.format("%.2f", healthTotal));
+        Shopping.setText("Shopping: £" + String.format("%.2f", shoppingTotal));
+        Pets.setText("Pets: £" + String.format("%.2f", petsTotal));
+        Other.setText("Other: £" + String.format("%.2f", otherTotal));
+        Transport.setText("Transport: £" + String.format("%.2f", transportTotal));
     }
 
 
