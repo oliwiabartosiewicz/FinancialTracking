@@ -88,6 +88,8 @@ public class HomeFragment extends Fragment {
 
 
 
+
+
                         // Remove currency symbol from total
                         totalStr = totalStr.replace("£", "").trim();
                         try {
