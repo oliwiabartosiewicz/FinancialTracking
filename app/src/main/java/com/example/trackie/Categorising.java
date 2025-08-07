@@ -26,12 +26,11 @@ public class Categorising {
         ));
         CATEGORY_KEYWORDS.put("Shopping", Arrays.asList(
                 "zara", "h&m", "primark", "topshop", "amazon", "ebay",
-                "apple", "walmart", "purchase", "electronics", "clothes",
-                "deichmann", "shoes", "footwear"
+                "apple", "purchase", "electronics", "clothes",
+                "deichmann", "shoes", "footwear","crocs","newlook"
         ));
         CATEGORY_KEYWORDS.put("Pets", Arrays.asList(
-                "petshop", "animal", "dog", "cat", "aquarium",
-                "grooming", "veterinary", "leash", "treats"
+                "animal", "treats"
         ));
         CATEGORY_KEYWORDS.put("Other", Arrays.asList(
                 "charity", "donation", "gift", "subscription", "membership",
