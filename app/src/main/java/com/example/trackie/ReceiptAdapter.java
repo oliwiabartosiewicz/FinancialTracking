@@ -30,6 +30,7 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
     @Override
     public void onBindViewHolder(@NonNull ReceiptViewHolder holder, int position) {
         Receipt receipt = receiptList.get(position);
+        String url = receipt.getImageUrl();
         holder.receiptDate.setText("Date: " + receipt.getDate());
         holder.receiptTotal.setText("Total: " + receipt.getTotal());
         holder.receiptCategory.setText("Category: " + receipt.getCategory());

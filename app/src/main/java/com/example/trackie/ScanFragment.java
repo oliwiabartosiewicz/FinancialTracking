@@ -30,8 +30,6 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.example.trackie.ReceiptAnalysis2;
-
 
 
 import java.io.File;
@@ -40,6 +38,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ScanFragment extends Fragment {
+
+
+
     private Button takePictureButton, uploadPdfButton, uploadScreenshotButton;
     private ActivityResultLauncher<Intent> cameraLauncher;
     private ActivityResultLauncher<String> pdfPickerLauncher;
@@ -150,43 +151,35 @@ public class ScanFragment extends Fragment {
                         for (Text.TextBlock block : result.getTextBlocks()) {
                             resultText.append(block.getText()).append("\n");
                         }
-                        //Storing receipts in firestore
+                        //building OCR text
                         String ocrText = resultText.toString();
-                        NLPCategory nlp = new NLPCategory(requireContext());
-                        String category = nlp.classify(ocrText);
-                        Log.d("ScanFragment", "Predicted category: " + category);
-                        Toast.makeText(getContext(), "Category: " + category, Toast.LENGTH_SHORT).show();
+                        Log.d("ScanFragment", "OCR Text extracted:\n" + ocrText);
 
+                        //extract category
+                        String category = Categorising.classify(ocrText);
+                        Log.d("ScanFragment", " Category: " + category);
 
-                        Log.d("ScanFragment", "Analysing text: " + ocrText);
-                        Map<String, String> analysedFields = ReceiptAnalysis2.analyseText(ocrText);
-                        Log.d("ScanFragment", "Extracted fields: " + analysedFields.toString());
+                        //extract data and time
+                        Map<String, String> extracted = ReceiptAnalysis2.analyseText(ocrText);
+                        String date  = extracted.get("date");
+                        String total = extracted.get("total");
+                        Log.d("ScanFragment", "Extracted date: "  + date);
+                        Log.d("ScanFragment", "Extracted total: " + total);
 
                         Map<String, Object> receiptData = new HashMap<>();
                         receiptData.put("rawText", ocrText);
                         receiptData.put("timestamp", FieldValue.serverTimestamp());
-
                         receiptData.put("category", category);
+                        if (date  != null) receiptData.put("date",  date);
+                        if (total != null) receiptData.put("total", total);
 
-                        if (analysedFields.containsKey("date")) {
-                            receiptData.put("date", analysedFields.get("date"));
-                        }
-                        if (!analysedFields.containsKey("date")) {
-                            Log.w("ScanFragment", "No date extracted!");
-                        }
-                        if (!analysedFields.containsKey("total")) {
-                            Log.w("ScanFragment", "No total extracted!");
-                        }
-
-                        if (analysedFields.containsKey("total")) {
-                            receiptData.put("total", analysedFields.get("total"));
-                        }
 
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         if (user == null) {
                             Toast.makeText(getContext(), "User not signed in", Toast.LENGTH_SHORT).show();
                             return;
                         }
+
                         Log.d("ScanFragment", "Receipt data: " + receiptData.toString());
                         uploadToStorageAndFirestore(imageUri, receiptData);
                     })
@@ -212,7 +205,6 @@ public class ScanFragment extends Fragment {
         // Add timestamp
         receiptData.put("timestamp", FieldValue.serverTimestamp());
 
-
         StorageReference storageRef = FirebaseStorage.getInstance().getReference()
                 .child("receipts/" + userId + "/" + System.currentTimeMillis() + ".jpg");
 
@@ -220,6 +212,7 @@ public class ScanFragment extends Fragment {
                 .addOnSuccessListener(taskSnapshot -> {
                     storageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
                         receiptData.put("imageUrl", downloadUri.toString());
+
 
                         FirebaseFirestore.getInstance()
                                 .collection("users")
@@ -241,4 +234,9 @@ public class ScanFragment extends Fragment {
                     Toast.makeText(getContext(), "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
     }
+
+
+
+
+
 }
