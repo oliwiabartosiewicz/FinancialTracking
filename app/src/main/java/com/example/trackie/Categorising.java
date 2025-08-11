@@ -10,10 +10,11 @@ public class Categorising {
     private static final Map<String, List<String>> CATEGORY_KEYWORDS = new HashMap<>();
 
     static {
+        //linking cat names to a list of related keywords
         CATEGORY_KEYWORDS.put("Food", Arrays.asList(
                 "aldi", "tesco", "lidl", "waitrose", "wholefoods",
                 "groceries", "fruit", "vegetables", "eggs", "milk",
-                "bread", "cheese"
+                "bread", "cheese","sainsbury's"
         ));
         CATEGORY_KEYWORDS.put("Eating Out", Arrays.asList(
                 "mcdonald's", "kfc", "pizza", "starbucks", "nando's",
@@ -41,7 +42,7 @@ public class Categorising {
     public static String classify(String text) {
         String lowerText = text.toLowerCase();
 
-// go through each category and its key words and return  category found
+// go through each category and its key words and return category found
         for (Map.Entry<String, List<String>> entry : CATEGORY_KEYWORDS.entrySet()) {
             for (String keyword : entry.getValue()) {
                 if (lowerText.contains(keyword)) {

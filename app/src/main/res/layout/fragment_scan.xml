@@ -28,7 +28,7 @@
         android:id="@+id/uploadScreenshotButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Upload Screenshot"
+        android:text="Upload  Picture"
         android:backgroundTint="@color/black"
     android:textColor="@android:color/white"
         android:layout_marginTop="16dp" />

@@ -91,19 +91,14 @@ public class ScanFragment extends Fragment {
                     }
                 }
         );
-        pdfPickerLauncher = registerForActivityResult(
-                new ActivityResultContracts.GetContent(),
-                uri -> {
-                    if (uri != null) {
-                        Toast.makeText(getContext(), "PDF selected!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
+
         imagePickerLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
                 uri -> {
                     if (uri != null) {
-                        Toast.makeText(getContext(), "Screenshot selected!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Photo selected!", Toast.LENGTH_SHORT).show();
+                        photoUri = uri;
+                        runMLKitOCR(photoUri);
                     }
                 }
         );

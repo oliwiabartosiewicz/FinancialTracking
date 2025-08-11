@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import java.util.List;
-
+//displying each receipt visually
 public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptViewHolder> {
 
     private Context context;
@@ -27,17 +27,18 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
         View view = LayoutInflater.from(context).inflate(R.layout.receipt_item, parent, false);
         return new ReceiptViewHolder(view);
     }
-
-    @Override
+//runs every time a receipt item is being displayed in RecyclerView:
+    @Override//
     public void onBindViewHolder(@NonNull ReceiptViewHolder holder, int position) {
+
         Receipt receipt = receiptList.get(position);
         holder.receiptDate.setText("Date: " + receipt.getDate());
         holder.receiptTotal.setText("Total: " + receipt.getTotal());
         String category = receipt.getCategory();
         if (category == null || category.isEmpty()) {
-            category = "Uncategorised";
+            category = "Other";
         }
-        holder.receiptCategory.setText("Category: " + receipt.getCategory());
+        holder.receiptCategory.setText("Category: " + category);
 
         String url = receipt.getImageUrl();
         Log.d("ReceiptAdapter", " Image URL: " + url);

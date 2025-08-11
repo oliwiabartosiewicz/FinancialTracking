@@ -75,6 +75,7 @@ public class HomeFragment extends Fragment {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     Map<String, Float> categorySums = new HashMap<>();
 
+                    // Looping through each receipt document
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         String category = doc.getString("category");
                         if (category == null || category.isEmpty()) {
@@ -89,7 +90,9 @@ public class HomeFragment extends Fragment {
                         // Remove currency symbol from total
                         totalStr = totalStr.replace("£", "").trim();
                         try {
+                            //convert to float
                             float total = Float.parseFloat(totalStr);
+                            //current sum for cat or 0
                             float currentSum = categorySums.getOrDefault(category, 0f);
                             categorySums.put(category, currentSum + total);
                         } catch (NumberFormatException e) {

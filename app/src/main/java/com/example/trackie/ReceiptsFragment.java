@@ -21,7 +21,7 @@ import com.google.firebase.firestore.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-
+//Tells the adapter - here’s the list
 public class ReceiptsFragment extends Fragment {
     private RecyclerView recyclerView;
     private ReceiptAdapter adapter;
