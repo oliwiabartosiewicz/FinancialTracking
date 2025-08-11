@@ -56,7 +56,6 @@ public class ScanFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_scan, container, false);
 
         takePictureButton = view.findViewById(R.id.takePictureButton);
-        uploadPdfButton = view.findViewById(R.id.uploadPdfButton);
         uploadScreenshotButton = view.findViewById(R.id.uploadScreenshotButton);
         setupLaunchers();
         takePictureButton.setOnClickListener(v -> {
@@ -66,10 +65,6 @@ public class ScanFragment extends Fragment {
             } else {
                 requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
             }
-        });
-
-        uploadPdfButton.setOnClickListener(v -> {
-            pdfPickerLauncher.launch("application/pdf");
         });
 
         uploadScreenshotButton.setOnClickListener(v -> {

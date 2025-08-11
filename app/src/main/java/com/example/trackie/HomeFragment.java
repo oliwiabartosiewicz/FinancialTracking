@@ -21,12 +21,14 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +47,8 @@ public class HomeFragment extends Fragment {
     private TextView Other;
     private TextView Food;
     private TextView Transport;
+    private TextView totalForThisMonth;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +62,8 @@ public class HomeFragment extends Fragment {
         Other = view.findViewById(R.id.Other);
         Food = view.findViewById(R.id.Food);
         Transport = view.findViewById(R.id.Transport);
+        totalForThisMonth = view.findViewById(R.id.TotalForThisMonth);
+
 
         fetchAndDisplayCategoryTotalsfromFirebase();
 
@@ -75,8 +81,16 @@ public class HomeFragment extends Fragment {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     Map<String, Float> categorySums = new HashMap<>();
 
+                    float totalForMonth = 0f;
                     // Looping through each receipt document
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
+
+                        Timestamp timestamp = doc.getTimestamp("timestamp");
+                        if (timestamp == null || !isTimestampInCurrentMonth(timestamp)) {
+                            continue;
+                            }
+
+
                         String category = doc.getString("category");
                         if (category == null || category.isEmpty()) {
                             category = "Other";
@@ -95,15 +109,35 @@ public class HomeFragment extends Fragment {
                             //current sum for cat or 0
                             float currentSum = categorySums.getOrDefault(category, 0f);
                             categorySums.put(category, currentSum + total);
+
+                            totalForMonth += total;
+
                         } catch (NumberFormatException e) {
                             Log.w("HomeFragment", "Invalid total value in: " + doc.getId() + " - " + totalStr);
                         }
                     }
 
+                    totalForThisMonth.setText("This Month's Spending: £" + String.format("%.2f", totalForMonth));
                     setupPieChart(categorySums);
                     updateCategoryTextViews(categorySums);
                 });
 
+
+
+    }
+
+    private boolean isTimestampInCurrentMonth(Timestamp timestamp) {
+        if (timestamp == null) return false;
+
+        Calendar cal = Calendar.getInstance();
+        int currentMonth = cal.get(Calendar.MONTH);
+        int currentYear = cal.get(Calendar.YEAR);
+
+        cal.setTime(timestamp.toDate());
+        int receiptMonth = cal.get(Calendar.MONTH);
+        int receiptYear = cal.get(Calendar.YEAR);
+
+        return (receiptMonth == currentMonth && receiptYear == currentYear);
     }
     private void updateCategoryTextViews(Map<String, Float> categorySums) {
         // if no total found then set to 0.00
