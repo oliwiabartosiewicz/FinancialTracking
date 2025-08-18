@@ -163,17 +163,12 @@ public class HomeFragment extends Fragment {
         private void setupPieChart(Map<String, Float> categorySums) {
             List<PieEntry> entries = new ArrayList<>(); //list to create each pie chart slice
 
-          //total sum per category of pie slice
-            float totalSum = 0f;
-            for (float val : categorySums.values()) {
-                totalSum += val;
-            }
 
             // Loop through each category and its total spend
             for (Map.Entry<String, Float> entry : categorySums.entrySet()) {
-                float percentage = (entry.getValue() / totalSum) * 100;
-                entries.add(new PieEntry(percentage, entry.getKey()));
-                                                           //cat name
+                entries.add(new PieEntry(entry.getValue(), entry.getKey()));
+                                            //total percentage    //cat name
+
             }
 
             if (!entries.isEmpty()) {
@@ -189,6 +184,7 @@ public class HomeFragment extends Fragment {
 
                 dataSet.setValueTextSize(14f);
                 dataSet.setValueTextColor(Color.BLACK);
+                pieChart.setUsePercentValues(true);
                 dataSet.setValueFormatter(new PercentFormatter(pieChart));
 
                 PieData pieData = new PieData(dataSet);
