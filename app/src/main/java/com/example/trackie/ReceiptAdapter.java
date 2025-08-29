@@ -43,7 +43,6 @@ public class ReceiptAdapter extends RecyclerView.Adapter<ReceiptAdapter.ReceiptV
         String url = receipt.getImageUrl();
         Log.d("ReceiptAdapter", " Image URL: " + url);
 
-//loading the image using glide
         Glide.with(context)
                 .load(receipt.getImageUrl())
                 .into(holder.receiptImage);

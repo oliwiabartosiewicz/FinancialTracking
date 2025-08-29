@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +37,7 @@ public class ReceiptsFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_receipts, container, false);
 
+
         recyclerView = view.findViewById(R.id.receiptRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -57,15 +59,9 @@ public class ReceiptsFragment extends Fragment {
                             String total = doc.getString("total");
                             String imageUrl = doc.getString("imageUrl");
                             String category = doc.getString("category");
-
-
                             Log.d("ReceiptsFragment", "Firestore doc imageUrl: " + imageUrl);
-
                             receiptList.add(new Receipt(date, total, imageUrl, category));
                             Log.d("ReceiptsFragment", "date: " + date + ", total: " + total + ", imageUrl: " + imageUrl + ", category: " + category);
-
-
-
                         }
                         adapter.notifyDataSetChanged();
                     })

@@ -39,11 +39,8 @@ import java.util.Map;
 
 public class ScanFragment extends Fragment {
 
-
-
-    private Button takePictureButton, uploadPdfButton, uploadScreenshotButton;
+    private Button takePictureButton, uploadScreenshotButton;
     private ActivityResultLauncher<Intent> cameraLauncher;
-    private ActivityResultLauncher<String> pdfPickerLauncher;
     private ActivityResultLauncher<String> imagePickerLauncher;
     private static final int REQUEST_CAMERA_PERMISSION = 100;
 
@@ -70,7 +67,6 @@ public class ScanFragment extends Fragment {
         uploadScreenshotButton.setOnClickListener(v -> {
             imagePickerLauncher.launch("image/*");
         });
-
         return view;
     }
 
@@ -132,7 +128,6 @@ public class ScanFragment extends Fragment {
 
     private void runMLKitOCR(Uri imageUri) {
         try {
-
             InputImage image = InputImage.fromFilePath(requireContext(), imageUri);
             TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
             recognizer.process(image)
@@ -157,7 +152,6 @@ public class ScanFragment extends Fragment {
                         String date  = extracted.get("date");
                         String total = extracted.get("total");
 
-
                         Map<String, Object> receiptData = new HashMap<>();
                         receiptData.put("rawText", ocrText);
                         receiptData.put("timestamp", FieldValue.serverTimestamp());
@@ -166,13 +160,11 @@ public class ScanFragment extends Fragment {
                         if (date  != null) receiptData.put("date",  date);
                         if (total != null) receiptData.put("total", total);
 
-
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                         if (user == null) {
                             Toast.makeText(getContext(), "User not signed in", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
 
                         Log.d("ScanFragment", "Receipt data: " + receiptData.toString());
                         uploadToStorageAndFirestore(imageUri, receiptData);
@@ -208,7 +200,6 @@ public class ScanFragment extends Fragment {
                     storageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
                         receiptData.put("imageUrl", downloadUri.toString());
 
-
                         FirebaseFirestore.getInstance()
                                 .collection("users")
                                 .document(userId)
@@ -232,9 +223,4 @@ public class ScanFragment extends Fragment {
                     Toast.makeText(getContext(), "Image upload failed: " + e.getMessage(), Toast.LENGTH_LONG).show();}
                 });
     }
-
-
-
-
-
 }

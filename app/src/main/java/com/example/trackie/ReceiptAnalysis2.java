@@ -16,7 +16,7 @@ public class ReceiptAnalysis2 {
         String date = extractDate(ocrText);
         String total = extractTotal(ocrText);
         if (total == null) {
-            total = extractTotalFromText(ocrText);
+            total = extractHighestTotalFromText(ocrText);
         }
         if (date != null) {
             extractedData.put("date", date);
@@ -29,10 +29,9 @@ public class ReceiptAnalysis2 {
 
         return extractedData;
     }
-
+//created extractDate with help from ChatGPT and StackOverflow
     private static String extractDate(String text) {
         String datePattern = "\\b(\\d{1,2}[\\/\\-. ]\\d{1,2}[\\/\\-. ]\\d{2,4}" +
-                "|\\d{4}[\\/\\-. ]\\d{1,2}[\\/\\-. ]\\d{1,2}" +
                 "|\\d{1,2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]* \\d{2,4}" +
                 "|(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]* \\d{1,2}, \\d{2,4})\\b";
 
@@ -44,6 +43,8 @@ public class ReceiptAnalysis2 {
         return null;
     }
 
+
+    // created extractTotal with help from chatGPT and amended
     private static String extractTotal(String text) {
         String totalPattern ="(?i)" +
                 "(total|amount|grand total|balance due|amount due|balance|subtotal|sub total|GBP)" +
@@ -60,8 +61,7 @@ public class ReceiptAnalysis2 {
         }
         return null;
     }
-
-    public static String extractTotalFromText(String text) {
+    public static String extractHighestTotalFromText(String text) {
         if (text == null || text.isEmpty()) return null;
 
         Pattern pattern = Pattern.compile("(?:£|€|EUR)?\\s*(\\d{1,4}[.,]\\d{2})");
@@ -73,12 +73,12 @@ public class ReceiptAnalysis2 {
         while (matcher.find()) {
             String amountStr = matcher.group(1).replace(",", ".");
             try {
-                double value = Double.parseDouble(amountStr);
+                double value = Double.parseDouble(matcher.group(1).replace(",", "."));
                 if (value > highestValue) {
                     highestValue = value;
                     bestMatch = "£" + amountStr;
                 }
-                //extracts the numeric part from the £, if unable to do so it  skips it without crashing
+                //extracts the numeric part from the £, if unable to do so it  skips
             } catch (NumberFormatException ignored) {
             }
         }
