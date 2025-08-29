@@ -50,7 +50,6 @@ public class Categorising {
                 }
             }
         }
-// if no words match it will be classed as other 
         return "Other";
     }
 }
